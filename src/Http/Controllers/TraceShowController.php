@@ -4,6 +4,7 @@ namespace Trail\Http\Controllers;
 
 use Inertia\Inertia;
 use Inertia\Response;
+use Trail\Models\TrailUser;
 use Trail\Models\TrailTrace;
 
 class TraceShowController
@@ -12,7 +13,18 @@ class TraceShowController
     {
         return Inertia::render('Traces/Show', [
             'trace' => $trace->load('steps'),
-            'canViewTechnicalContext' => true,
+            'canViewTechnicalContext' => $this->canViewTechnicalContext(),
         ]);
+    }
+
+    private function canViewTechnicalContext(): bool
+    {
+        if (config('trail.access.mode') !== 'trail_users') {
+            return true;
+        }
+
+        $user = TrailUser::query()->find(session('trail_user_id'));
+
+        return (bool) $user?->canViewTechnicalContext();
     }
 }

@@ -3,6 +3,7 @@
 namespace Trail;
 
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 use Trail\Commands\CreateSignedTrailLinkCommand;
 use Trail\Commands\CreateTrailUserCommand;
 use Trail\Commands\PruneTrailCommand;
@@ -12,6 +13,7 @@ use Trail\Identity\Resolvers\AuthUserIdentityResolver;
 use Trail\Identity\Resolvers\RequestPayloadIdentityResolver;
 use Trail\Storage\DatabaseTrailStorage;
 use Trail\Storage\NullTrailStorage;
+use Trail\Storage\RedisTrailStorage;
 use Trail\Storage\TrailStorageDriver;
 use Trail\Support\Sanitizer;
 
@@ -41,6 +43,11 @@ class TrailServiceProvider extends ServiceProvider
         $this->app->bind(TrailStorageDriver::class, function () {
             return match (config('trail.storage.driver', 'database')) {
                 'database' => new DatabaseTrailStorage(),
+                'redis' => new RedisTrailStorage(
+                    config('trail.storage.redis.connection', 'default'),
+                    config('trail.storage.redis.prefix', 'trail'),
+                    config('trail.storage.redis.ttl_days', 90),
+                ),
                 default => new NullTrailStorage(),
             };
         });
@@ -61,6 +68,8 @@ class TrailServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadRoutesFrom(__DIR__ . '/../routes/trail.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'trail');
+
+        Inertia::setRootView('trail::app');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
