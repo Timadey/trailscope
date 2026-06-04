@@ -2,12 +2,16 @@
 
 namespace Trail;
 
+use Illuminate\Support\ServiceProvider;
+use Trail\Commands\PruneTrailCommand;
 use Trail\Context\ContextNormalizer;
 use Trail\Identity\IdentityResolver;
 use Trail\Identity\Resolvers\AuthUserIdentityResolver;
 use Trail\Identity\Resolvers\RequestPayloadIdentityResolver;
+use Trail\Storage\DatabaseTrailStorage;
+use Trail\Storage\NullTrailStorage;
+use Trail\Storage\TrailStorageDriver;
 use Trail\Support\Sanitizer;
-use Illuminate\Support\ServiceProvider;
 
 class TrailServiceProvider extends ServiceProvider
 {
@@ -32,6 +36,13 @@ class TrailServiceProvider extends ServiceProvider
             ]);
         });
 
+        $this->app->bind(TrailStorageDriver::class, function () {
+            return match (config('trail.storage.driver', 'database')) {
+                'database' => new DatabaseTrailStorage(),
+                default => new NullTrailStorage(),
+            };
+        });
+
         $this->app->scoped(TrailManager::class);
     }
 
@@ -40,5 +51,17 @@ class TrailServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/trail.php' => config_path('trail.php'),
         ], 'trail-config');
+
+        $this->publishes([
+            __DIR__ . '/../database/migrations' => database_path('migrations'),
+        ], 'trail-migrations');
+
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                PruneTrailCommand::class,
+            ]);
+        }
     }
 }
