@@ -8,15 +8,13 @@ use Trail\TraceContext;
 
 class RequestPayloadIdentityResolver implements IdentityResolverContract
 {
-    private array $keys = ['user_id', 'wallet_id', 'account_number', 'phone', 'email', 'username', 'reference', 'bvn', 'nin'];
-
     public function resolve(?Request $request = null, ?TraceContext $trace = null, array $context = []): ?ResolvedIdentity
     {
         if (! $request) {
             return null;
         }
 
-        foreach ($this->keys as $key) {
+        foreach (config('trail.identity.payload_keys', []) as $key) {
             $value = $request->input($key);
 
             if ($value === null || $value === '') {

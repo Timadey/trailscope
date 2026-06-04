@@ -1,0 +1,50 @@
+{
+  "resources/js/Pages/Auth/Login.tsx": {
+    "file": "assets/Login-DYjDuLVx.js",
+    "name": "Login",
+    "src": "resources/js/Pages/Auth/Login.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "resources/js/Pages/Journeys/User.tsx": {
+    "file": "assets/User-B7oSDQwe.js",
+    "name": "User",
+    "src": "resources/js/Pages/Journeys/User.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "resources/js/Pages/Traces/Index.tsx": {
+    "file": "assets/Index-C66XelKb.js",
+    "name": "Index",
+    "src": "resources/js/Pages/Traces/Index.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "resources/js/Pages/Traces/Show.tsx": {
+    "file": "assets/Show-C613Qjlw.js",
+    "name": "Show",
+    "src": "resources/js/Pages/Traces/Show.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "resources/js/app.tsx"
+    ]
+  },
+  "resources/js/app.tsx": {
+    "file": "assets/app-B80yptQn.js",
+    "name": "app",
+    "src": "resources/js/app.tsx",
+    "isEntry": true,
+    "dynamicImports": [
+      "resources/js/Pages/Auth/Login.tsx",
+      "resources/js/Pages/Journeys/User.tsx",
+      "resources/js/Pages/Traces/Index.tsx",
+      "resources/js/Pages/Traces/Show.tsx"
+    ]
+  }
+}

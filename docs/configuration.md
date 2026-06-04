@@ -12,3 +12,4 @@ Important settings:
 - `storage.write_mode`: `sync`, `after_response`, or `queue`.
 - `retention.days`: default `90`.
 - `sanitization.sensitive_keys`: keys masked before storage.
+- `identity.payload_keys`: request payload keys used to resolve journey ownership.

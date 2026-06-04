@@ -60,4 +60,20 @@ return [
     'logging' => [
         'mirror_to_app_log' => false,
     ],
+
+    'identity' => [
+        'payload_keys' => [
+            'user_id',
+            'wallet_id',
+            'account_number',
+            'phone',
+            'phone_number',
+            'email',
+            'email_address',
+            'username',
+            'reference',
+            'bvn',
+            'nin',
+        ],
+    ],
 ];
