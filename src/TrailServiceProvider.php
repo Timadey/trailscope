@@ -2,6 +2,11 @@
 
 namespace Trail;
 
+use Trail\Context\ContextNormalizer;
+use Trail\Identity\IdentityResolver;
+use Trail\Identity\Resolvers\AuthUserIdentityResolver;
+use Trail\Identity\Resolvers\RequestPayloadIdentityResolver;
+use Trail\Support\Sanitizer;
 use Illuminate\Support\ServiceProvider;
 
 class TrailServiceProvider extends ServiceProvider
@@ -9,6 +14,25 @@ class TrailServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/trail.php', 'trail');
+
+        $this->app->singleton(Sanitizer::class, function () {
+            return new Sanitizer(
+                config('trail.sanitization.sensitive_keys', []),
+                config('trail.sanitization.mask', '[Filtered]'),
+                config('trail.capture.response_preview_bytes', 8192),
+            );
+        });
+
+        $this->app->singleton(ContextNormalizer::class);
+
+        $this->app->singleton(IdentityResolver::class, function () {
+            return new IdentityResolver([
+                new AuthUserIdentityResolver(),
+                new RequestPayloadIdentityResolver(),
+            ]);
+        });
+
+        $this->app->scoped(TrailManager::class);
     }
 
     public function boot(): void
