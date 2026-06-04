@@ -5,6 +5,8 @@ namespace Trail\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use Trail\Enums\TrailUserRole;
 use Trail\Models\TrailUser;
 
 class CreateTrailUserCommand extends Command
@@ -15,6 +17,8 @@ class CreateTrailUserCommand extends Command
 
     public function handle(): int
     {
+        $this->validateRole();
+
         $password = (string) ($this->option('password') ?: Str::password(24));
 
         TrailUser::query()->updateOrCreate(
@@ -33,5 +37,13 @@ class CreateTrailUserCommand extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    private function validateRole(): void
+    {
+        validator(
+            ['role' => $this->option('role')],
+            ['role' => ['required', Rule::in(TrailUserRole::values())]],
+        )->validate();
     }
 }

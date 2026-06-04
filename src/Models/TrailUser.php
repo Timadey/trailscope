@@ -4,6 +4,7 @@ namespace Trail\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Trail\Enums\TrailUserRole;
 
 class TrailUser extends Authenticatable
 {
@@ -18,11 +19,11 @@ class TrailUser extends Authenticatable
 
     public function canViewTechnicalContext(): bool
     {
-        return in_array($this->role, ['developer', 'admin'], true);
+        return TrailUserRole::tryFrom($this->role)?->canViewTechnicalContext() ?? false;
     }
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role === TrailUserRole::Admin->value;
     }
 }
