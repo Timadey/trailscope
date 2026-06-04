@@ -3,6 +3,8 @@
 namespace Trail;
 
 use Illuminate\Support\ServiceProvider;
+use Trail\Commands\CreateSignedTrailLinkCommand;
+use Trail\Commands\CreateTrailUserCommand;
 use Trail\Commands\PruneTrailCommand;
 use Trail\Context\ContextNormalizer;
 use Trail\Identity\IdentityResolver;
@@ -57,9 +59,13 @@ class TrailServiceProvider extends ServiceProvider
         ], 'trail-migrations');
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/trail.php');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'trail');
 
         if ($this->app->runningInConsole()) {
             $this->commands([
+                CreateTrailUserCommand::class,
+                CreateSignedTrailLinkCommand::class,
                 PruneTrailCommand::class,
             ]);
         }
