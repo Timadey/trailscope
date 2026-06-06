@@ -112,7 +112,7 @@ class DashboardRoutesTest extends TestCase
         $this->assertSame(['status' => 200, 'content' => '{"ok":true}'], $page['props']['trace']['response']);
     }
 
-    public function test_user_journey_includes_logout_url(): void
+    public function test_user_journey_includes_dashboard_navigation_urls(): void
     {
         config(['trail.access.mode' => 'gate']);
         \Illuminate\Support\Facades\Gate::define('viewTrail', fn ($user = null) => true);
@@ -128,6 +128,7 @@ class DashboardRoutesTest extends TestCase
         $page = $this->get('/trail/journeys/user/1')->assertOk()->viewData('page');
 
         $this->assertSame('/trail/logout', parse_url($page['props']['logoutUrl'], PHP_URL_PATH));
+        $this->assertSame('/trail/traces', parse_url($page['props']['tracesUrl'], PHP_URL_PATH));
     }
 
     public function test_invalid_login_redirects_with_validation_errors(): void

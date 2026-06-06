@@ -16,6 +16,7 @@ type Props = {
   ownerId: string;
   traces: Trace[];
   logoutUrl: string;
+  tracesUrl: string;
 };
 
 function statusClass(code: number | null): string {
@@ -51,7 +52,7 @@ function absoluteTime(dateStr: string | null): string {
   });
 }
 
-export default function UserJourney({ ownerType, ownerId, traces, logoutUrl }: Props) {
+export default function UserJourney({ ownerType, ownerId, traces, logoutUrl, tracesUrl }: Props) {
   const [search, setSearch]       = useState('');
   const [methodFilter, setMethod] = useState('');
   const [statusFilter, setStatus] = useState('');
@@ -95,7 +96,7 @@ export default function UserJourney({ ownerType, ownerId, traces, logoutUrl }: P
           <span className="trail-nav-wordmark">TrailScope</span>
         </div>
         <div className="trail-nav-right">
-          <Link href="../traces" className="btn btn-ghost btn-sm">
+          <Link href={tracesUrl} className="btn btn-ghost btn-sm">
             <ChevronLeftIcon /> Traces
           </Link>
           <button
