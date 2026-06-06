@@ -9,6 +9,7 @@ type Trace = {
   status_code: number | null;
   owner_label: string | null;
   started_at: string | null;
+  url: string;
 };
 
 export default function TraceIndex({ traces }: { traces: Trace[] }) {
@@ -36,7 +37,7 @@ export default function TraceIndex({ traces }: { traces: Trace[] }) {
               <td>{trace.path ?? '-'}</td>
               <td>{trace.owner_label ?? 'Unknown'}</td>
               <td>{trace.started_at ?? '-'}</td>
-              <td><Link href={`/trail/traces/${trace.id}`}>Open</Link></td>
+              <td><Link href={trace.url}>Open</Link></td>
             </tr>
           ))}
         </tbody>

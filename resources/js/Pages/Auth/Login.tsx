@@ -1,13 +1,13 @@
 import React, { FormEvent, useState } from 'react';
 import { router } from '@inertiajs/react';
 
-export default function Login() {
+export default function Login({ submitUrl }: { submitUrl: string }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   function submit(event: FormEvent) {
     event.preventDefault();
-    router.post('/trail/login', { email, password });
+    router.post(submitUrl, { email, password });
   }
 
   return (

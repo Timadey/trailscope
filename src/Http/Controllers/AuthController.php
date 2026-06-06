@@ -14,7 +14,9 @@ class AuthController
 {
     public function login(): Response
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Auth/Login', [
+            'submitUrl' => route('trail.authenticate'),
+        ]);
     }
 
     public function authenticate(Request $request): RedirectResponse
