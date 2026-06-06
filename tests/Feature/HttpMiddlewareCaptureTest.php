@@ -21,6 +21,10 @@ class HttpMiddlewareCaptureTest extends TestCase
 
             return response()->json(['ok' => true]);
         });
+
+        Route::middleware('trail')->post('/alias-transfer', fn () => response()->json(['ok' => true]));
+
+        Route::middleware('trail')->get('/health', fn () => response()->json(['ok' => true]));
     }
 
     public function test_it_records_request_trace(): void
@@ -34,5 +38,26 @@ class HttpMiddlewareCaptureTest extends TestCase
         $this->assertSame('POST', $trace->method);
         $this->assertSame(200, $trace->status_code);
         $this->assertTrue($trace->steps()->where('message', 'handler reached')->exists());
+    }
+
+    public function test_trail_middleware_alias_records_request_trace(): void
+    {
+        config(['trail.storage.write_mode' => 'sync']);
+
+        $this->postJson('/alias-transfer')->assertOk();
+
+        $this->assertTrue(TrailTrace::query()->where('path', 'alias-transfer')->exists());
+    }
+
+    public function test_excluded_paths_are_not_recorded(): void
+    {
+        config([
+            'trail.storage.write_mode' => 'sync',
+            'trail.capture.except_paths' => ['health'],
+        ]);
+
+        $this->getJson('/health')->assertOk();
+
+        $this->assertFalse(TrailTrace::query()->where('path', 'health')->exists());
     }
 }

@@ -14,6 +14,7 @@ class TraceShowController
         return Inertia::render('Traces/Show', [
             'trace' => $trace->load('steps'),
             'canViewTechnicalContext' => $this->canViewTechnicalContext(),
+            'logoutUrl' => route('trail.logout'),
         ]);
     }
 

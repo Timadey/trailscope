@@ -4,6 +4,7 @@ namespace Trail\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 use Trail\Context\ContextNormalizer;
@@ -25,7 +26,7 @@ class RecordTrail
 
     public function handle(Request $request, Closure $next): Response
     {
-        if (! config('trail.enabled', true)) {
+        if (! config('trail.enabled', true) || $this->shouldSkip($request)) {
             return $next($request);
         }
 
@@ -76,6 +77,19 @@ class RecordTrail
         $action = $request->route()?->getActionName();
 
         return $action === 'Closure' ? null : $action;
+    }
+
+    private function shouldSkip(Request $request): bool
+    {
+        foreach (config('trail.capture.except_paths', []) as $pattern) {
+            if ($request->is($pattern)) {
+                return true;
+            }
+        }
+
+        $routeName = optional($request->route())->getName();
+
+        return $routeName && Str::is(config('trail.capture.except_route_names', []), $routeName);
     }
 
     private function flush(TraceContext $trace): void

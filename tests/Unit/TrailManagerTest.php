@@ -20,6 +20,37 @@ class TrailManagerTest extends TestCase
         $this->assertSame(['value_1' => 5000], $trace->steps[0]['context']);
     }
 
+    public function test_it_preserves_named_step_context(): void
+    {
+        $manager = app(TrailManager::class);
+
+        $trace = $manager->start();
+        $manager->step('checking network', product: 'airtime', is_awuf: true);
+
+        $this->assertSame([
+            'product' => 'airtime',
+            'is_awuf' => true,
+        ], $trace->steps[0]['context']);
+    }
+
+    public function test_step_helper_infers_simple_positional_variable_names(): void
+    {
+        config(['trail.steps.infer_variable_names' => true]);
+
+        $manager = app(TrailManager::class);
+
+        $trace = $manager->start();
+        $product = 'airtime';
+        $is_awuf = true;
+
+        step('checking network', $product, $is_awuf);
+
+        $this->assertSame([
+            'product' => 'airtime',
+            'is_awuf' => true,
+        ], $trace->steps[0]['context']);
+    }
+
     public function test_step_without_active_trace_is_ignored(): void
     {
         $manager = app(TrailManager::class);

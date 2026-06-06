@@ -138,6 +138,8 @@ return [
     | Lower limits reduce storage usage and help avoid keeping large payloads.
     |
     | headers: include request headers in captured request context.
+    | except_paths: request path patterns that should not be traced.
+    | except_route_names: route-name patterns that should not be traced.
     | ip: include the request IP address.
     | user_agent: include the browser or client user agent.
     | max_context_bytes: intended maximum normalized context size per step or payload.
@@ -147,9 +149,15 @@ return [
     | to 1.0.
     |
     | Example: set sample_success_rate to 0.25 when sampling support is enabled.
+    | Example except_paths: health, up, horizon/*, telescope/*
     |
     */
     'capture' => [
+        'except_paths' => [
+            'health',
+            'up',
+        ],
+        'except_route_names' => [],
         'headers' => false,
         'ip' => true,
         'user_agent' => true,
@@ -157,6 +165,21 @@ return [
         'max_steps_per_trace' => 200,
         'response_preview_bytes' => 8192,
         'sample_success_rate' => 1.0,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Step Context
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, TrailScope tries to infer simple positional variable names in
+    | calls such as step('checking network', $product, $is_active). PHP does not
+    | expose variable names at runtime, so this is best-effort source inspection.
+    | Named arguments and associative arrays remain the most reliable option.
+    |
+    */
+    'steps' => [
+        'infer_variable_names' => true,
     ],
 
     /*

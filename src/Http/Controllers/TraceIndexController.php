@@ -12,14 +12,14 @@ class TraceIndexController
     {
         $traces = TrailTrace::query()
             ->latest('started_at')
-            ->limit(100)
-            ->get()
-            ->map(fn (TrailTrace $trace) => array_merge($trace->toArray(), [
+            ->simplePaginate(25)
+            ->through(fn (TrailTrace $trace) => array_merge($trace->toArray(), [
                 'url' => route('trail.traces.show', $trace),
             ]));
 
         return Inertia::render('Traces/Index', [
             'traces' => $traces,
+            'logoutUrl' => route('trail.logout'),
         ]);
     }
 }

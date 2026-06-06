@@ -23,6 +23,7 @@ class UserJourneyController
             'ownerType' => $ownerType,
             'ownerId' => $ownerId,
             'traces' => $traces,
+            'logoutUrl' => route('trail.logout'),
         ]);
     }
 }

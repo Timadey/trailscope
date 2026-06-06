@@ -14,13 +14,14 @@ class ContextNormalizer
     {
     }
 
-    public function normalize(array $context, bool $includeStackTrace = false): array
+    public function normalize(array $context, bool $includeStackTrace = false, array $keys = []): array
     {
         $normalized = [];
 
-        foreach (array_values($context) as $index => $value) {
+        foreach ($context as $rawKey => $value) {
+            $index = count($normalized);
             $position = $index + 1;
-            $key = $this->keyFor($value, $position);
+            $key = is_string($rawKey) ? $rawKey : ($keys[$index] ?? $this->keyFor($value, $position));
             $normalized[$key] = $this->normalizeValue($value, $includeStackTrace);
         }
 

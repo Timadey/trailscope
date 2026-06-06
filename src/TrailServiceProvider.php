@@ -5,6 +5,7 @@ namespace Trail;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
+use Trail\Http\Middleware\RecordTrail;
 use Trail\Commands\CreateSignedTrailLinkCommand;
 use Trail\Commands\CreateTrailUserCommand;
 use Trail\Commands\PruneTrailCommand;
@@ -58,6 +59,8 @@ class TrailServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->app['router']->aliasMiddleware('trail', RecordTrail::class);
+
         $this->publishes([
             __DIR__ . '/../config/trail.php' => config_path('trail.php'),
         ], 'trail-config');

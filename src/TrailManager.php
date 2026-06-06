@@ -27,11 +27,16 @@ class TrailManager
 
     public function step(string $message, mixed ...$context): void
     {
+        $this->stepWithKeys($message, [], ...$context);
+    }
+
+    public function stepWithKeys(string $message, array $keys = [], mixed ...$context): void
+    {
         if (! $this->current) {
             return;
         }
 
-        $this->current->addStep($message, $this->normalizer->normalize($context));
+        $this->current->addStep($message, $this->normalizer->normalize($context, false, $keys));
     }
 
     public function clear(): void
