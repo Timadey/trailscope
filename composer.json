@@ -1,6 +1,6 @@
 {
-  "name": "trail/trail",
-  "description": "Laravel request and user journey observability package.",
+  "name": "timadey/trailscope",
+  "description": "Laravel request tracing and user journey observability with step logging, dashboard insights, and database or Redis storage.",
   "type": "library",
   "license": "MIT",
   "require": {

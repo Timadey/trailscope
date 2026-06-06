@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trail</title>
+    <title>TrailScope</title>
     @viteReactRefresh
     @vite('resources/js/app.tsx')
     @inertiaHead

@@ -1,10 +1,10 @@
 # Configuration
 
-Trail publishes `config/trail.php`.
+TrailScope publishes `config/trail.php`.
 
 Important settings:
 
-- `enabled`: turns Trail capture on or off.
+- `enabled`: turns TrailScope capture on or off.
 - `path`: dashboard path, default `trail`.
 - `access.mode`: `trail_users`, `gate`, or `signed_url`.
 - `access.ip_allowlist`: optional perimeter allowlist.

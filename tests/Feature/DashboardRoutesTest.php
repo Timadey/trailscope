@@ -15,7 +15,7 @@ class DashboardRoutesTest extends TestCase
     public function test_trace_index_route_loads(): void
     {
         config(['trail.access.mode' => 'gate']);
-        \Illuminate\Support\Facades\Gate::define('viewTrail', fn () => true);
+        \Illuminate\Support\Facades\Gate::define('viewTrail', fn ($user = null) => true);
 
         TrailTrace::query()->create(['trace_id' => 'trace-1', 'method' => 'GET', 'path' => 'test']);
 

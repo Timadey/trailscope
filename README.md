@@ -1,11 +1,11 @@
-# Trail
+# TrailScope
 
-Trail is a Laravel package for request traces and user journey observability.
+TrailScope is a Laravel request tracing and user journey observability package with step logging, dashboard insights, and database or Redis storage.
 
 ## Install
 
 ```bash
-composer require trail/trail
+composer require timadey/trailscope
 php artisan vendor:publish --tag=trail-config
 php artisan vendor:publish --tag=trail-migrations
 php artisan migrate
@@ -28,7 +28,7 @@ Route::middleware([\Trail\Http\Middleware\RecordTrail::class])->group(function (
 step('charging wallet', $wallet, $amount, $response);
 ```
 
-Trail automatically attaches the step to the active request trace, normalizes context, sanitizes sensitive data, resolves identity, and stores the trace through the configured driver.
+TrailScope automatically attaches the step to the active request trace, normalizes context, sanitizes sensitive data, resolves identity, and stores the trace through the configured driver.
 
 ## Storage
 
