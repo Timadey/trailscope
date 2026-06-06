@@ -44,6 +44,25 @@ class DashboardRoutesTest extends TestCase
         $this->assertNotNull($page['props']['traces']['next_page_url']);
     }
 
+    public function test_trace_index_includes_journey_url_for_owned_traces(): void
+    {
+        config(['trail.access.mode' => 'gate']);
+        \Illuminate\Support\Facades\Gate::define('viewTrail', fn ($user = null) => true);
+
+        TrailTrace::query()->create([
+            'trace_id' => 'trace-1',
+            'method' => 'GET',
+            'path' => 'test',
+            'owner_type' => 'user',
+            'owner_id' => '1',
+            'owner_label' => 'Admin',
+        ]);
+
+        $page = $this->get('/trail/traces')->assertOk()->viewData('page');
+
+        $this->assertSame('/trail/journeys/user/1', parse_url($page['props']['traces']['data'][0]['journey_url'], PHP_URL_PATH));
+    }
+
     public function test_trace_show_includes_logout_url(): void
     {
         config(['trail.access.mode' => 'gate']);
@@ -54,6 +73,25 @@ class DashboardRoutesTest extends TestCase
         $page = $this->get('/trail/traces/' . $trace->id)->assertOk()->viewData('page');
 
         $this->assertSame('/trail/logout', parse_url($page['props']['logoutUrl'], PHP_URL_PATH));
+    }
+
+    public function test_trace_show_includes_journey_url_for_owned_trace(): void
+    {
+        config(['trail.access.mode' => 'gate']);
+        \Illuminate\Support\Facades\Gate::define('viewTrail', fn ($user = null) => true);
+
+        $trace = TrailTrace::query()->create([
+            'trace_id' => 'trace-1',
+            'method' => 'GET',
+            'path' => 'test',
+            'owner_type' => 'user',
+            'owner_id' => '1',
+            'owner_label' => 'Admin',
+        ]);
+
+        $page = $this->get('/trail/traces/' . $trace->id)->assertOk()->viewData('page');
+
+        $this->assertSame('/trail/journeys/user/1', parse_url($page['props']['trace']['journey_url'], PHP_URL_PATH));
     }
 
     public function test_trace_show_exposes_response_for_technical_viewers(): void

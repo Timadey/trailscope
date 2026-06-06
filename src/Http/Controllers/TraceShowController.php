@@ -11,11 +11,24 @@ class TraceShowController
 {
     public function __invoke(TrailTrace $trace): Response
     {
+        $trace->load('steps');
+
         return Inertia::render('Traces/Show', [
-            'trace' => $trace->load('steps'),
+            'trace' => array_merge($trace->toArray(), [
+                'journey_url' => $this->journeyUrl($trace),
+            ]),
             'canViewTechnicalContext' => $this->canViewTechnicalContext(),
             'logoutUrl' => route('trail.logout'),
         ]);
+    }
+
+    private function journeyUrl(TrailTrace $trace): ?string
+    {
+        if (! $trace->owner_type || ! $trace->owner_id) {
+            return null;
+        }
+
+        return route('trail.journeys.user', [$trace->owner_type, $trace->owner_id]);
     }
 
     private function canViewTechnicalContext(): bool

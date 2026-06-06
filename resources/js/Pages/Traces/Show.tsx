@@ -12,6 +12,7 @@ type Trace = {
   owner_label: string | null;
   owner_type: string | null;
   owner_id: string | null;
+  journey_url: string | null;
   started_at: string | null;
   request: unknown;
   response: unknown;
@@ -108,6 +109,13 @@ export default function TraceShow({ trace, canViewTechnicalContext = true, logou
                 <UserIcon />
                 {trace.owner_label}
               </span>
+            )}
+
+            {trace.journey_url && (
+              <Link href={trace.journey_url} className="btn btn-ghost btn-sm">
+                View journey
+                <ChevronRightIcon />
+              </Link>
             )}
 
             {trace.started_at && (

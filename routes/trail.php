@@ -16,9 +16,13 @@ Route::middleware(config('trail.middleware', ['web']))
 
             abort_unless($path && $assetRoot && str_starts_with($path, $assetRoot), 404);
 
-            return response()->file($path, [
-                'Content-Type' => str_ends_with($asset, '.js') ? 'application/javascript' : 'application/octet-stream',
-            ]);
+            $contentType = match (true) {
+                str_ends_with($asset, '.js') => 'application/javascript',
+                str_ends_with($asset, '.css') => 'text/css; charset=UTF-8',
+                default => 'application/octet-stream',
+            };
+
+            return response()->file($path, ['Content-Type' => $contentType]);
         })->where('asset', '[A-Za-z0-9_.-]+')->name('trail.assets');
 
         Route::get('/login', [AuthController::class, 'login'])->name('trail.login');

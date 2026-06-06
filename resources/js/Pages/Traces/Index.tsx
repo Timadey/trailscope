@@ -12,6 +12,7 @@ type Trace = {
   started_at: string | null;
   duration_ms: number | null;
   url: string;
+  journey_url: string | null;
 };
 
 type PaginatedTraces = {
@@ -262,7 +263,13 @@ export default function TraceIndex({ traces, logoutUrl }: Props) {
                       {trace.path ?? '—'}
                     </td>
                     <td className="td-owner">
-                      {trace.owner_label ?? <span style={{ color: 'var(--text-muted)' }}>Unknown</span>}
+                      {trace.journey_url ? (
+                        <Link href={trace.journey_url} className="owner-link">
+                          {trace.owner_label ?? 'View journey'}
+                        </Link>
+                      ) : (
+                        trace.owner_label ?? <span style={{ color: 'var(--text-muted)' }}>Unknown</span>
+                      )}
                     </td>
                     <td className="td-time">
                       <span

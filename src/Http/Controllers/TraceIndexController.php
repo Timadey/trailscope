@@ -15,11 +15,21 @@ class TraceIndexController
             ->simplePaginate(25)
             ->through(fn (TrailTrace $trace) => array_merge($trace->toArray(), [
                 'url' => route('trail.traces.show', $trace),
+                'journey_url' => $this->journeyUrl($trace),
             ]));
 
         return Inertia::render('Traces/Index', [
             'traces' => $traces,
             'logoutUrl' => route('trail.logout'),
         ]);
+    }
+
+    private function journeyUrl(TrailTrace $trace): ?string
+    {
+        if (! $trace->owner_type || ! $trace->owner_id) {
+            return null;
+        }
+
+        return route('trail.journeys.user', [$trace->owner_type, $trace->owner_id]);
     }
 }

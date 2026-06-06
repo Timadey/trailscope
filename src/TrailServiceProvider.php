@@ -75,8 +75,10 @@ class TrailServiceProvider extends ServiceProvider
 
         View::composer('trail::app', function ($view) {
             $manifest = json_decode(file_get_contents(__DIR__ . '/../dist/.vite/manifest.json'), true, flags: JSON_THROW_ON_ERROR);
+            $entry = $manifest['resources/js/app.tsx'];
 
-            $view->with('trailScript', basename($manifest['resources/js/app.tsx']['file']));
+            $view->with('trailScript', basename($entry['file']));
+            $view->with('trailStyles', array_map('basename', $entry['css'] ?? []));
         });
 
         Inertia::setRootView('trail::app');
