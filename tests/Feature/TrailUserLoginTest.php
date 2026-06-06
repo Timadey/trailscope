@@ -20,6 +20,15 @@ class TrailUserLoginTest extends TestCase
         $this->get('/trail/traces')->assertRedirect('/trail/login');
     }
 
+    public function test_login_page_loads_package_dashboard_assets(): void
+    {
+        $this->withVite();
+
+        $this->get('/trail/login')
+            ->assertOk()
+            ->assertSee('/trail/assets/app-', false);
+    }
+
     public function test_trail_user_can_log_in(): void
     {
         config(['trail.access.mode' => 'trail_users']);

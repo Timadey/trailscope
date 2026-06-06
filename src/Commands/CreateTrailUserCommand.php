@@ -30,7 +30,8 @@ class CreateTrailUserCommand extends Command
             ],
         );
 
-        $this->info('Trail user saved.');
+        $this->info('TrailScope user saved.');
+        $this->line('Login URL: ' . $this->loginUrl());
 
         if (! $this->option('password')) {
             $this->line("Password: {$password}");
@@ -45,5 +46,13 @@ class CreateTrailUserCommand extends Command
             ['role' => $this->option('role')],
             ['role' => ['required', Rule::in(TrailUserRole::values())]],
         )->validate();
+    }
+
+    private function loginUrl(): string
+    {
+        $baseUrl = rtrim((string) config('app.url', url('/')), '/');
+        $path = trim((string) config('trail.path', 'trail'), '/');
+
+        return $baseUrl . '/' . trim($path . '/login', '/');
     }
 }

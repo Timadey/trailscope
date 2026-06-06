@@ -10,6 +10,17 @@ use Trail\Http\Middleware\AuthorizeTrailDashboard;
 Route::middleware(config('trail.middleware', ['web']))
     ->prefix(config('trail.path', 'trail'))
     ->group(function () {
+        Route::get('/assets/{asset}', function (string $asset) {
+            $path = realpath(__DIR__ . '/../dist/assets/' . basename($asset));
+            $assetRoot = realpath(__DIR__ . '/../dist/assets');
+
+            abort_unless($path && $assetRoot && str_starts_with($path, $assetRoot), 404);
+
+            return response()->file($path, [
+                'Content-Type' => str_ends_with($asset, '.js') ? 'application/javascript' : 'application/octet-stream',
+            ]);
+        })->where('asset', '[A-Za-z0-9_.-]+')->name('trail.assets');
+
         Route::get('/login', [AuthController::class, 'login'])->name('trail.login');
         Route::post('/login', [AuthController::class, 'authenticate'])->name('trail.authenticate');
         Route::post('/logout', [AuthController::class, 'logout'])->name('trail.logout');

@@ -3,6 +3,7 @@
 namespace Trail;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\View;
 use Inertia\Inertia;
 use Trail\Commands\CreateSignedTrailLinkCommand;
 use Trail\Commands\CreateTrailUserCommand;
@@ -68,6 +69,12 @@ class TrailServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadRoutesFrom(__DIR__ . '/../routes/trail.php');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'trail');
+
+        View::composer('trail::app', function ($view) {
+            $manifest = json_decode(file_get_contents(__DIR__ . '/../dist/.vite/manifest.json'), true, flags: JSON_THROW_ON_ERROR);
+
+            $view->with('trailScript', basename($manifest['resources/js/app.tsx']['file']));
+        });
 
         Inertia::setRootView('trail::app');
 
