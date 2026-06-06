@@ -1,3 +1,7 @@
+<p align="center">
+    <img src="art/logo.svg" alt="TrailScope logo" width="96">
+</p>
+
 # TrailScope
 
 TrailScope is a Laravel request tracing and user journey observability package with step logging, dashboard insights, and database or Redis storage.

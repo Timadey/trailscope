@@ -1,6 +1,6 @@
 {
   "resources/js/Pages/Auth/Login.tsx": {
-    "file": "assets/Login-lx-tigOQ.js",
+    "file": "assets/Login-C75a-_fF.js",
     "name": "Login",
     "src": "resources/js/Pages/Auth/Login.tsx",
     "isDynamicEntry": true,
@@ -9,7 +9,7 @@
     ]
   },
   "resources/js/Pages/Journeys/User.tsx": {
-    "file": "assets/User-GUesSmKm.js",
+    "file": "assets/User-BiphD6TA.js",
     "name": "User",
     "src": "resources/js/Pages/Journeys/User.tsx",
     "isDynamicEntry": true,
@@ -18,7 +18,7 @@
     ]
   },
   "resources/js/Pages/Traces/Index.tsx": {
-    "file": "assets/Index-DQRPGY9b.js",
+    "file": "assets/Index-C2U41L4A.js",
     "name": "Index",
     "src": "resources/js/Pages/Traces/Index.tsx",
     "isDynamicEntry": true,
@@ -27,7 +27,7 @@
     ]
   },
   "resources/js/Pages/Traces/Show.tsx": {
-    "file": "assets/Show-D_xmmz9L.js",
+    "file": "assets/Show-D-wJvG2e.js",
     "name": "Show",
     "src": "resources/js/Pages/Traces/Show.tsx",
     "isDynamicEntry": true,
@@ -36,7 +36,7 @@
     ]
   },
   "resources/js/app.tsx": {
-    "file": "assets/app-DjLa_wq5.js",
+    "file": "assets/app-F-3-7ly6.js",
     "name": "app",
     "src": "resources/js/app.tsx",
     "isEntry": true,
